@@ -45,6 +45,12 @@ public class EventManager : MonoBehaviour {
             roomScript.isRoomDirty = true;
         }
 
+        if (GUI.Button(new Rect(10, 160, 130, 30), "Spawn Customer"))
+        {
+            FrontDeskController deskController = desk.GetComponent<FrontDeskController>();
+            Instantiate(deskController.customer, deskController.customerSpawn.position, Quaternion.identity);
+        }
+
     }
 
     void MakeRoomDirty()

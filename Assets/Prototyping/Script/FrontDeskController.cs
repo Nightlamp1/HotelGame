@@ -10,6 +10,9 @@ public class FrontDeskController : MonoBehaviour {
     public Transform customerStartPoint, customerEndPoint;
     Vector2 customerStartPos, customerEndPos;
 
+    public Transform customerSpawn;
+    public GameObject customer;
+
     public bool isCustomerWaiting = false; //Default is no customers
 
 	// Use this for initialization
@@ -26,6 +29,13 @@ public class FrontDeskController : MonoBehaviour {
         Collider2D playerCheck = Physics2D.OverlapArea(startPosition, endPosition);
         Collider2D customerCheck = Physics2D.OverlapArea(customerStartPos, customerEndPos);
 
+        if(customerCheck != null)
+        {
+            if(customerCheck.tag == "Customer")
+            {
+                isCustomerWaiting = true;
+            }
+        }
 
         if(playerCheck != null)
         {
@@ -34,6 +44,7 @@ public class FrontDeskController : MonoBehaviour {
                 if (Input.GetButtonDown("Submit"))
                 {
                     Debug.Log("CUSTOMER CHECKED IN!!!!!");
+                    Destroy(customerCheck.gameObject);
                     isCustomerWaiting = false;
                 }
             }

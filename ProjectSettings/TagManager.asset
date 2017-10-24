@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Room
   - Desk
+  - Customer
   layers:
   - Default
   - TransparentFX
