@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RoomScript : MonoBehaviour {
 
@@ -12,11 +13,12 @@ public class RoomScript : MonoBehaviour {
     public Sprite occupiedRoom, dirtyRoom, cleanRoom; //Sprites for dirty room or clean room
 
     private float timeToClean = 3f;
+    public Slider cleanProgressBar;
 
 
 	// Use this for initialization
 	void Start () {
-        timeToClean = 3f;
+        timeToClean = 0.0f;
 	}
 	
     void Raycasting()
@@ -47,16 +49,18 @@ public class RoomScript : MonoBehaviour {
             {
                 //If interact button is pressed by player room will be cleaned
 
-                timeToClean -= Time.deltaTime;
+                timeToClean += Time.deltaTime;
+                cleanProgressBar.value = timeToClean;
                 Debug.Log("time reaminging");
                 Debug.Log(timeToClean);
 
-                if(timeToClean < 0)
+                if(timeToClean > 3)
                 {
                     isRoomDirty = false;
                     SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
                     roomSprite.sprite = cleanRoom;
-                    timeToClean = 3f;
+                    timeToClean = 0.0f;
+                    cleanProgressBar.value = timeToClean;
                 }
                 
             }       
