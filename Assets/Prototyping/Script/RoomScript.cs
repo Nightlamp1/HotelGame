@@ -15,11 +15,14 @@ public class RoomScript : MonoBehaviour {
     private float timeToClean = 3f;
     public Slider cleanProgressBar;
 
+    ScoreManager scoreManager;
 
-	// Use this for initialization
-	void Start () {
+
+    // Use this for initialization
+    void Start () {
         timeToClean = 0.0f;
-	}
+        scoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<ScoreManager>();
+    }
 	
     void Raycasting()
     {
@@ -61,6 +64,7 @@ public class RoomScript : MonoBehaviour {
                     roomSprite.sprite = cleanRoom;
                     timeToClean = 0.0f;
                     cleanProgressBar.value = timeToClean;
+                    scoreManager.levelScore += 10;
                 }
                 
             }       

@@ -14,6 +14,8 @@ public class FrontDeskController : MonoBehaviour {
     public GameObject customer;
     public GameObject[] rooms;
 
+    ScoreManager scoreManager;
+
     public bool isCustomerWaiting = false; //Default is no customers
 
 	// Use this for initialization
@@ -25,6 +27,7 @@ public class FrontDeskController : MonoBehaviour {
         customerEndPos = new Vector2(customerEndPoint.position.x, customerEndPoint.position.y);
 
         rooms = GameObject.FindGameObjectsWithTag("Room"); //Grab all Room objects in the scene
+        scoreManager = GameObject.FindGameObjectWithTag("ScoreManager").GetComponent<ScoreManager>();
     }
 	
 	// Update is called once per frame
@@ -65,6 +68,7 @@ public class FrontDeskController : MonoBehaviour {
                 Destroy(customerCheck.gameObject);
                 roomScript.isRoomOccupied = true;
                 isCustomerWaiting = false;
+                scoreManager.levelScore += 10;
                 break;
             }
         }
