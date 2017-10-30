@@ -11,10 +11,12 @@ public class RoomScript : MonoBehaviour {
     public Transform lineStart, lineEnd; //Used for player in range raycast
     public Sprite occupiedRoom, dirtyRoom, cleanRoom; //Sprites for dirty room or clean room
 
+    private float timeToClean = 3f;
+
 
 	// Use this for initialization
 	void Start () {
-		
+        timeToClean = 3f;
 	}
 	
     void Raycasting()
@@ -41,12 +43,22 @@ public class RoomScript : MonoBehaviour {
 
         if (interact)
         {
-            if (Input.GetButtonDown("Submit") && isRoomDirty)
+            if (Input.GetButton("Submit") && isRoomDirty)
             {
                 //If interact button is pressed by player room will be cleaned
-                isRoomDirty = false;
-                SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
-                roomSprite.sprite = cleanRoom;
+
+                timeToClean -= Time.deltaTime;
+                Debug.Log("time reaminging");
+                Debug.Log(timeToClean);
+
+                if(timeToClean < 0)
+                {
+                    isRoomDirty = false;
+                    SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
+                    roomSprite.sprite = cleanRoom;
+                    timeToClean = 3f;
+                }
+                
             }       
         }
 

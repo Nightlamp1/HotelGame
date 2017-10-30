@@ -7,6 +7,7 @@ public class EventManager : MonoBehaviour {
     public GameObject[] rooms;
     public GameObject desk;
     public float eventTimer = 5f;
+    public bool allRoomsFull = false;
 
 	// Use this for initialization
 	void Start () {
@@ -22,9 +23,20 @@ public class EventManager : MonoBehaviour {
         }
         else
         {
-            MakeRoomDirty();
+            int eventItem = Random.Range(0, 2);
+            if(eventItem == 0 && !allRoomsFull)
+            {
+                SpawnCustomer(); //Will need logic to check for open rooms
+            }
+            else
+            {
+                MakeRoomDirty();
+            }
             eventTimer = 7f;
         }
+
+        CheckForOpenRooms();
+
 	}
 
     private void OnGUI()
@@ -40,23 +52,47 @@ public class EventManager : MonoBehaviour {
 
         if (GUI.Button(new Rect(10, 130, 100, 30), "Random dirty"))
         {
-            int roomId = Random.Range(0, rooms.Length);
-            RoomScript roomScript = rooms[roomId].GetComponent<RoomScript>();
-            roomScript.isRoomDirty = true;
+            MakeRoomDirty();
         }
 
         if (GUI.Button(new Rect(10, 160, 130, 30), "Spawn Customer"))
         {
-            FrontDeskController deskController = desk.GetComponent<FrontDeskController>();
-            Instantiate(deskController.customer, deskController.customerSpawn.position, Quaternion.identity);
+            SpawnCustomer();
         }
 
     }
 
     void MakeRoomDirty()
     {
+        //Add logic to check if room is/was occupied
         int roomId = Random.Range(0, rooms.Length);
         RoomScript roomScript = rooms[roomId].GetComponent<RoomScript>();
-        roomScript.isRoomDirty = true;
+        if (roomScript.isRoomOccupied)
+        {
+            roomScript.isRoomDirty = true;
+            roomScript.isRoomOccupied = false;
+        }
+        
+    }
+
+    void SpawnCustomer()
+    {
+        FrontDeskController deskController = desk.GetComponent<FrontDeskController>();
+        Instantiate(deskController.customer, deskController.customerSpawn.position, Quaternion.identity);
+    }
+
+    void CheckForOpenRooms()
+    {
+        for (int room = 0; room < rooms.Length; room++)
+        {
+            RoomScript roomScript = rooms[room].GetComponent<RoomScript>();
+            if (!roomScript.isRoomOccupied)
+            {
+                allRoomsFull = false;
+                return;
+            }
+        }
+        allRoomsFull = true;
+        //Debug.Log("ALL ROOMS ARE FULL");
     }
 }

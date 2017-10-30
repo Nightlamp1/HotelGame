@@ -12,6 +12,7 @@ public class FrontDeskController : MonoBehaviour {
 
     public Transform customerSpawn;
     public GameObject customer;
+    public GameObject[] rooms;
 
     public bool isCustomerWaiting = false; //Default is no customers
 
@@ -22,6 +23,8 @@ public class FrontDeskController : MonoBehaviour {
 
         customerStartPos = new Vector2(customerStartPoint.position.x, customerStartPoint.position.y);
         customerEndPos = new Vector2(customerEndPoint.position.x, customerEndPoint.position.y);
+
+        rooms = GameObject.FindGameObjectsWithTag("Room"); //Grab all Room objects in the scene
     }
 	
 	// Update is called once per frame
@@ -43,13 +46,27 @@ public class FrontDeskController : MonoBehaviour {
             {
                 if (Input.GetButtonDown("Submit"))
                 {
-                    Debug.Log("CUSTOMER CHECKED IN!!!!!");
-                    Destroy(customerCheck.gameObject);
-                    isCustomerWaiting = false;
+                    CheckInCustomer(customerCheck);
                 }
             }
         }
        
         
 	}
+
+    void CheckInCustomer(Collider2D customerCheck)
+    {
+        for(int currentRoom = 0; currentRoom < rooms.Length; currentRoom++)
+        {
+            RoomScript roomScript = rooms[currentRoom].GetComponent<RoomScript>();
+            if (!roomScript.isRoomOccupied && !roomScript.isRoomDirty)
+            {
+                //Debug.Log("room is free user can checkin");
+                Destroy(customerCheck.gameObject);
+                roomScript.isRoomOccupied = true;
+                isCustomerWaiting = false;
+                break;
+            }
+        }
+    }
 }
