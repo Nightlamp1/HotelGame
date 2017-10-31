@@ -26,7 +26,7 @@ public class EventManager : MonoBehaviour {
             int eventItem = Random.Range(0, 5);
             if(eventItem == 0 && !allRoomsFull)
             {
-                SpawnCustomer(); //Will need logic to check for open rooms
+                SpawnCustomer();
             }
             else
             {
@@ -64,7 +64,6 @@ public class EventManager : MonoBehaviour {
 
     void MakeRoomDirty()
     {
-        //Add logic to check if room is/was occupied
         int roomId = Random.Range(0, rooms.Length);
         RoomScript roomScript = rooms[roomId].GetComponent<RoomScript>();
         if (roomScript.isRoomOccupied)
@@ -93,6 +92,5 @@ public class EventManager : MonoBehaviour {
             }
         }
         allRoomsFull = true;
-        //Debug.Log("ALL ROOMS ARE FULL");
     }
 }

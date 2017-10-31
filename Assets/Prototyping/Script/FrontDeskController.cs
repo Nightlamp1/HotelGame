@@ -64,7 +64,6 @@ public class FrontDeskController : MonoBehaviour {
             RoomScript roomScript = rooms[currentRoom].GetComponent<RoomScript>();
             if (!roomScript.isRoomOccupied && !roomScript.isRoomDirty)
             {
-                //Debug.Log("room is free user can checkin");
                 Destroy(customerCheck.gameObject);
                 roomScript.isRoomOccupied = true;
                 isCustomerWaiting = false;
