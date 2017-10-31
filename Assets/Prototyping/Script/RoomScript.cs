@@ -12,10 +12,10 @@ public class RoomScript : MonoBehaviour {
     public Transform lineStart, lineEnd; //Used for player in range raycast
     public Sprite occupiedRoom, dirtyRoom, cleanRoom; //Sprites for dirty room or clean room
 
-    private float timeToClean = 3f;
-    public Slider cleanProgressBar;
+    private float timeToClean; //Counter to keep track of how long room clean has gone
+    public Slider cleanProgressBar; //Progress bar UI element to monitor room clean progress
 
-    ScoreManager scoreManager;
+    ScoreManager scoreManager; //Instance of ScoreManager to allow for editing of player score in game
 
 
     // Use this for initialization
@@ -26,7 +26,7 @@ public class RoomScript : MonoBehaviour {
 	
     void Raycasting()
     {
-        Debug.DrawLine(lineStart.position, lineEnd.position, Color.blue);
+        Debug.DrawLine(lineStart.position, lineEnd.position, Color.blue); //Gizmo to help troubleshooting
         RaycastHit2D testRoomHit = Physics2D.Linecast(lineStart.position, lineEnd.position); //Check to see if any object is in front of the room using raycast
         if (testRoomHit.collider != null)
         {
@@ -45,48 +45,48 @@ public class RoomScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Raycasting(); //Call Raycasting() to verify if any objects/players in range of the room and able to interact
+        CheckForInteraction(); //Call CheckForInteraction() to manage player interactions with this room
+        CheckRoomState(); //Call CheckRoomState() to verify room state and update variables/spirtes as needed
+    }
 
-        if (interact)
-        {
-            if (Input.GetButton("Submit") && isRoomDirty)
-            {
-                //If interact button is pressed by player room will be cleaned
-
-                timeToClean += Time.deltaTime;
-                cleanProgressBar.value = timeToClean;
-                Debug.Log("time reaminging");
-                Debug.Log(timeToClean);
-
-                if(timeToClean > 3)
-                {
-                    isRoomDirty = false;
-                    SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
-                    roomSprite.sprite = cleanRoom;
-                    timeToClean = 0.0f;
-                    cleanProgressBar.value = timeToClean;
-                    scoreManager.levelScore += 10;
-                }
-                
-            }       
-        }
-
+    void CheckRoomState()
+    {
         if (isRoomDirty)
         {
-            //Update room sprite when room becomes dirty
-            isRoomOccupied = false; //may need to revisit for multi night stays??
+            isRoomOccupied = false;
             SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
             roomSprite.sprite = dirtyRoom;
             cleanProgressBar.gameObject.SetActive(true);
         }
         else if (isRoomOccupied)
         {
-            //Update room sprite to occupied sprite
             SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
             roomSprite.sprite = occupiedRoom;
         }
         else
         {
             cleanProgressBar.gameObject.SetActive(false);
+        }
+    }
+
+    void CheckForInteraction()
+    {
+        if (interact && Input.GetButton("Submit") && isRoomDirty)
+        {
+
+            //If interact button is pressed by player room cleaning action will be started and continue as long as button is pressed
+            timeToClean += Time.deltaTime;
+            cleanProgressBar.value = timeToClean;
+
+            if (timeToClean > 3) //Once counter reaches 3 room clean will be completed
+            {
+                isRoomDirty = false;
+                SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
+                roomSprite.sprite = cleanRoom;
+                timeToClean = 0.0f;
+                cleanProgressBar.value = timeToClean;
+                scoreManager.levelScore += 10;
+            }
         }
     }
 }
