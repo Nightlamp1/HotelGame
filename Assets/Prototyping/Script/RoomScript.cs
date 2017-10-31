@@ -75,13 +75,18 @@ public class RoomScript : MonoBehaviour {
             //Update room sprite when room becomes dirty
             isRoomOccupied = false; //may need to revisit for multi night stays??
             SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
-            roomSprite.sprite = dirtyRoom;    
+            roomSprite.sprite = dirtyRoom;
+            cleanProgressBar.gameObject.SetActive(true);
         }
         else if (isRoomOccupied)
         {
             //Update room sprite to occupied sprite
             SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
             roomSprite.sprite = occupiedRoom;
+        }
+        else
+        {
+            cleanProgressBar.gameObject.SetActive(false);
         }
     }
 }

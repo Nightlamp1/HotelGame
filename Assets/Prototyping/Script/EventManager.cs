@@ -6,7 +6,7 @@ public class EventManager : MonoBehaviour {
 
     public GameObject[] rooms;
     public GameObject desk;
-    public float eventTimer = 5f;
+    public float eventTimer = 2f;
     public bool allRoomsFull = false;
 
 	// Use this for initialization
@@ -23,7 +23,7 @@ public class EventManager : MonoBehaviour {
         }
         else
         {
-            int eventItem = Random.Range(0, 2);
+            int eventItem = Random.Range(0, 5);
             if(eventItem == 0 && !allRoomsFull)
             {
                 SpawnCustomer(); //Will need logic to check for open rooms
@@ -32,7 +32,7 @@ public class EventManager : MonoBehaviour {
             {
                 MakeRoomDirty();
             }
-            eventTimer = 7f;
+            eventTimer = 5f;
         }
 
         CheckForOpenRooms();
