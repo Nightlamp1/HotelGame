@@ -75,7 +75,6 @@ public class RoomScript : MonoBehaviour {
     {
         if (interact && Input.GetButton("Submit") && isRoomDirty)
         {
-
             //If interact button is pressed by player room cleaning action will be started and continue as long as button is pressed
             timeToClean += Time.deltaTime;
             cleanProgressBar.value = timeToClean;
@@ -89,6 +88,30 @@ public class RoomScript : MonoBehaviour {
                 cleanProgressBar.value = timeToClean;
                 scoreManager.levelScore += 10;
             }
+        }
+        else if(interact && Input.GetButtonDown("Submit") && isRoomOccupied)
+        {
+            Debug.Log("checking for bag");
+            Debug.DrawLine(lineStart.position, lineEnd.position, Color.blue); //Gizmo to help troubleshooting
+            RaycastHit2D playerCheck = Physics2D.Linecast(lineStart.position, lineEnd.position); //Check to see if any object is in front of the room using raycast
+            
+            if(playerCheck.transform.childCount != 0)
+            {
+                GameObject bag = playerCheck.transform.GetChild(0).gameObject;
+                BagScript thisBag = bag.GetComponent<BagScript>();
+
+                if(thisBag.customerId == customerId)
+                {
+                    Destroy(bag);
+                }
+                else
+                {
+                    Debug.Log("this is the wrong bag");
+                }
+            }
+            
+            
+
         }
     }
 }

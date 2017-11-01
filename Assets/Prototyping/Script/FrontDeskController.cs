@@ -17,6 +17,9 @@ public class FrontDeskController : MonoBehaviour {
     ScoreManager scoreManager;
 
     public bool isCustomerWaiting = false; //Default is no customers
+    public GameObject bag;
+    public Transform bagSpawn;
+    
 
 	// Use this for initialization
 	void Start () {
@@ -59,7 +62,10 @@ public class FrontDeskController : MonoBehaviour {
 
     void CheckInCustomer(Collider2D customerCheck)
     {
-        for(int currentRoom = 0; currentRoom < rooms.Length; currentRoom++)
+        BagScript newBag = bag.GetComponent<BagScript>();
+        newBag.customerId = customerCheck.gameObject.GetInstanceID();
+        Instantiate(bag, bagSpawn.position, Quaternion.identity);
+        for (int currentRoom = 0; currentRoom < rooms.Length; currentRoom++)
         {
             RoomScript roomScript = rooms[currentRoom].GetComponent<RoomScript>();
             if (!roomScript.isRoomOccupied && !roomScript.isRoomDirty)
@@ -67,6 +73,7 @@ public class FrontDeskController : MonoBehaviour {
                 roomScript.isRoomOccupied = true;
                 roomScript.customerId = customerCheck.gameObject.GetInstanceID();
                 isCustomerWaiting = false;
+                bagSpawn.Translate(Vector3.right * 1);
                 Destroy(customerCheck.gameObject);
                 scoreManager.levelScore += 10;
                 break;
