@@ -64,9 +64,10 @@ public class FrontDeskController : MonoBehaviour {
             RoomScript roomScript = rooms[currentRoom].GetComponent<RoomScript>();
             if (!roomScript.isRoomOccupied && !roomScript.isRoomDirty)
             {
-                Destroy(customerCheck.gameObject);
                 roomScript.isRoomOccupied = true;
+                roomScript.customerId = customerCheck.gameObject.GetInstanceID();
                 isCustomerWaiting = false;
+                Destroy(customerCheck.gameObject);
                 scoreManager.levelScore += 10;
                 break;
             }

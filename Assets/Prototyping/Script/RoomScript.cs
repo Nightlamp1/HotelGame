@@ -7,6 +7,7 @@ public class RoomScript : MonoBehaviour {
 
     public bool isRoomDirty = false; //room starts as clean
     public bool isRoomOccupied = false; //room starts as unoccupied
+    public int customerId;
 
     public bool interact = false; //room default interaction state is false
     public Transform lineStart, lineEnd; //Used for player in range raycast
@@ -54,6 +55,7 @@ public class RoomScript : MonoBehaviour {
         if (isRoomDirty)
         {
             isRoomOccupied = false;
+            customerId = 0;
             SpriteRenderer roomSprite = GetComponent<SpriteRenderer>();
             roomSprite.sprite = dirtyRoom;
             cleanProgressBar.gameObject.SetActive(true);
